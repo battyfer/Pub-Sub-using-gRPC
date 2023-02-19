@@ -1,0 +1,103 @@
+syntax = "proto3";
+
+package article;
+
+service Registry_Server_Service{
+    rpc Register(Server) returns (Registry_Response);
+    rpc GetServerList(Registry_Server) returns (stream Server_with_Address);
+}
+
+service Server_Service{
+    rpc JoinServer(Client) returns (Server_Response);
+    rpc LeaveServer(Client) returns (Server_Response);
+    rpc GetArticles(Article_Client) returns (stream Article_List);
+    rpc PublishArticle(Article_Client) returns (Article_Response);
+}
+
+
+
+
+
+
+message Registry_Server{
+    string id = 1;
+    string address = 2;
+}
+
+message Server_with_Address{
+    Server serverss = 1;
+}
+
+message Registry_Response{
+    string status = 1;
+}
+
+
+
+
+
+message Server{
+    string server_id = 1;
+    string address = 2;
+}
+
+message Server_Request {
+  string server_id = 1;
+}
+
+message Server_Response {
+  string status = 1;
+}
+
+
+
+
+
+message Client{
+    string client_id = 1;
+    string name = 2;
+}
+
+
+
+
+
+message Article {
+    string type = 1;
+    string author = 2;
+    string time = 3;
+    string content = 4;
+}
+
+message Article_Request {
+  string article_id = 1;
+}
+
+message Article_Respons{
+    oneof type {
+        string Sports = 1;
+        string Fashion = 2;
+        string Politics = 3;
+    }
+    string author = 4;
+    int64 time = 5;
+}
+
+message Article_Response {
+    string status = 1;
+}
+
+message Article_List {
+    Article articles = 1;
+}
+
+service Article_Service {
+    rpc GetArticle(Article_Request) returns (Article);
+}
+
+
+
+message Article_Client {
+    Article article = 1;
+    Client client = 2;
+}
